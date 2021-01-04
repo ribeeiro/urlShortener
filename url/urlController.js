@@ -23,11 +23,23 @@ router.get('/:path', async (req, res)=>{
 
 router.post('/scripts/shortenUrl', validateMiddleware, async (req, res)=>{
     const long = req.body.long;
-    const short = Math.floor(Math.random() * (800000 - 100000)) + 1000000;
+
+    function genpath(){
+        let short = Math.floor(Math.random() * (800000 - 100000)) + 1000000;
+        short = short.toString(36)
+        return short
+    }
+
+    let short = genpath();
+    let exists = await Urls.findOne({where: {short_path: short}})
+    while (exists){
+        short = genpath();
+        exists = await Urls.findOne({where: {short_path: short}})
+    }
     try{
         await Urls.create({
             long_uri: long,
-            short_path: short.toString(36)
+            short_path: short
         })
         res.send('oi');
     }
