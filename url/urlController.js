@@ -1,8 +1,11 @@
 const express= require('express');
 const router = express.Router();
 
+
+// models
 const Urls = require('./Urls');
 
+//midlewares
 const validateMiddleware = require('../middlewares/validateUrl');
 
 router.get('/:path', async (req, res)=>{
@@ -23,7 +26,7 @@ router.get('/:path', async (req, res)=>{
 
 router.post('/scripts/shortenUrl', validateMiddleware, async (req, res)=>{
     const long = req.body.long;
-
+    console.log(long)
     function genpath(){
         let short = Math.floor(Math.random() * (800000 - 100000)) + 1000000;
         short = short.toString(36)
@@ -43,7 +46,7 @@ router.post('/scripts/shortenUrl', validateMiddleware, async (req, res)=>{
         })
         res.send('oi');
     }
-    catch{
+    catch(err){
         res.redirect('/')
     }
 

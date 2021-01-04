@@ -8,7 +8,8 @@ const Urls = connection.define('Urls', {
     },
     short_path: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     }
 })
 
