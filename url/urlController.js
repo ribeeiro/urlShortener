@@ -7,6 +7,8 @@ const Urls = require('./Urls');
 
 //midlewares
 const validateMiddleware = require('../middlewares/validateUrl');
+const shortenMiddleware = require('../middlewares/shortenUrl');
+const setcookieMiddleware = require('../middlewares/setCookie');
 
 router.get('/:path', async (req, res)=>{
     const url_path = req.params.path;
@@ -24,26 +26,16 @@ router.get('/:path', async (req, res)=>{
     }
 })
 
-router.post('/scripts/shortenUrl', validateMiddleware, async (req, res)=>{
+router.post('/scripts/shortenUrl', validateMiddleware, shortenMiddleware, setcookieMiddleware, async (req, res)=>{
     const long = req.body.long;
-    function genpath(){
-        let short = Math.floor(Math.random() * (800000 - 100000)) + 1000000;
-        short = short.toString(36)
-        return short
-    }
-
-    let short = genpath();
-    let exists = await Urls.findOne({where: {short_path: short}})
-    while (exists){
-        short = genpath();
-        exists = await Urls.findOne({where: {short_path: short}})
-    }
+    const short = res.locals.short;
+    const paths = req.cookies.userpaths.split(',');
     try{
         await Urls.create({
             long_uri: long,
             short_path: short
         })
-        const domain = '127.0.0.1'
+        const domain = process.env.HOST;
         req.session.message = `${domain}/${short}`;
         res.redirect('/');
     }

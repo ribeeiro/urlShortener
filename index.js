@@ -3,6 +3,7 @@ const app = express();
 require('dotenv').config();
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 //models
 const Urls = require('./url/Urls');
 
@@ -30,17 +31,18 @@ app.use(session({
     resave: true,
     saveUninitialized: false,
     cookie: {
-        maxAge: 60000
+        maxAge: 10000
     }
 }))
-
+app.use(cookieParser());
 //routes
 app.use('/', urlsController);
 
-
 app.get('/',flashMessage, (req, res)=>{
-    res.render('index');
+    const paths = req.cookies.userpaths.split(',');
+    res.render('index', {paths});
 })
+
 
 const PORT = process.env.PORT || 3500;
 
