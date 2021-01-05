@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const bodyParser = require('body-parser');
-
+const session = require('express-session');
 //models
 const Urls = require('./url/Urls');
 
@@ -20,15 +20,25 @@ connection.authenticate().then(()=>{
 
 app.set('view engine', 'ejs');
 
+
+const flashMessage = require('./middlewares/flashMessage');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static('public'))
+app.use(express.static('public'));
+app.use(session({
+    secret: process.env.SECRET,
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60000
+    }
+}))
 
 //routes
 app.use('/', urlsController);
 
 
-app.get('/', (req, res)=>{
+app.get('/',flashMessage, (req, res)=>{
     res.render('index');
 })
 

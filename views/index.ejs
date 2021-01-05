@@ -10,9 +10,8 @@
     <div class="container mt-5">
         <form action="/scripts/shortenUrl" method="POST">
             <div class="input-group mb-3">
-                <input type="text" name="long" id="long" class="form-control" placeholder="type your long url here">
+                <input type="text" name="long" id="long" class="form-control" value="<%= message ? message : 'Type your url here' %>" onclick="this.select()">
                 <button class="input-group-text btn btn-success" >Shorten</button>
-
             </div>
         </form>
     </div>

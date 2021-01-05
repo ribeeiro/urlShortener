@@ -26,7 +26,6 @@ router.get('/:path', async (req, res)=>{
 
 router.post('/scripts/shortenUrl', validateMiddleware, async (req, res)=>{
     const long = req.body.long;
-    console.log(long)
     function genpath(){
         let short = Math.floor(Math.random() * (800000 - 100000)) + 1000000;
         short = short.toString(36)
@@ -44,10 +43,12 @@ router.post('/scripts/shortenUrl', validateMiddleware, async (req, res)=>{
             long_uri: long,
             short_path: short
         })
-        res.send('oi');
+        const domain = '127.0.0.1'
+        req.session.message = `${domain}/${short}`;
+        res.redirect('/');
     }
     catch(err){
-        res.redirect('/')
+        res.redirect('/');
     }
 
 })
