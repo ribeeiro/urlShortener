@@ -4,6 +4,9 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const {Op} = require('sequelize');
+
+
 //models
 const Urls = require('./url/Urls');
 
@@ -23,6 +26,7 @@ app.set('view engine', 'ejs');
 
 
 const flashMessage = require('./middlewares/flashMessage');
+const setCookies = require('./middlewares/setCookie');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
@@ -39,8 +43,24 @@ app.use(cookieParser());
 app.use('/', urlsController);
 
 app.get('/',flashMessage, (req, res)=>{
-    const paths = req.cookies.userpaths.split(',');
-    res.render('index', {paths});
+    const pathCookie = req.cookies.userpaths
+    if(pathCookie){
+        let paths = pathCookie.split(',');
+
+        Urls.findAll({
+            where: {
+                short_path: {
+                    [Op.or]: paths}
+            },
+        order:[
+            ['createdAt', 'DESC']
+        ]})
+        .then(path_data =>{
+            res.render('index', {path_data});
+        })
+    }else{
+        res.render('index', {path_data: null});
+    }
 })
 
 

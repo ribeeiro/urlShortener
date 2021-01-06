@@ -1,7 +1,9 @@
 function shortUrl(req,res, next){
-    let short = Math.floor(Math.random() * (800000 - 100000)) + 1000000;
+    const MAX_VALUE = 800000;
+    const MIN_VALUE = 100000;
+    let short = Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE)) + MIN_VALUE;
     short = short.toString(36);
-    res.locals.short = short;
+    res.locals.short = `${req.headers.host}/${short}`;
     next();
 }
 

@@ -8,10 +8,11 @@ const Urls = require('./Urls');
 //midlewares
 const validateMiddleware = require('../middlewares/validateUrl');
 const shortenMiddleware = require('../middlewares/shortenUrl');
-const setcookieMiddleware = require('../middlewares/setCookie');
+const setCookieMiddleware = require('../middlewares/setCookie');
+const getTitleMiddleware = require('../middlewares/getTitle');
 
 router.get('/:path', async (req, res)=>{
-    const url_path = req.params.path;
+    const url_path = `${req.headers.host}/${req.params.path}`;
     try{
         const url = await Urls.findOne(
             {
@@ -26,23 +27,27 @@ router.get('/:path', async (req, res)=>{
     }
 })
 
-router.post('/scripts/shortenUrl', validateMiddleware, shortenMiddleware, setcookieMiddleware, async (req, res)=>{
-    const long = req.body.long;
-    const short = res.locals.short;
-    const paths = req.cookies.userpaths.split(',');
+
+router.post('/scripts/shortenUrl', validateMiddleware, shortenMiddleware, setCookieMiddleware, getTitleMiddleware, 
+async (req, res)=>{
     try{
+        const long = req.body.long;
+        const short = res.locals.short;
+        const title = res.locals.title;
         await Urls.create({
             long_uri: long,
-            short_path: short
+            short_path: short,
+            title
         })
-        const domain = process.env.HOST;
-        req.session.message = `${domain}/${short}`;
+        // change the value for the url shortened
+        req.session.message = `${short}`;
         res.redirect('/');
     }
     catch(err){
         res.redirect('/');
     }
-
+    
+    
 })
 
 module.exports = router;

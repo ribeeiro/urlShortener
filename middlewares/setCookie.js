@@ -1,16 +1,21 @@
 function setCookies(req, res, next){
+    var short = res.locals.short
+
     if(!req.cookies.userpaths){
-        res.cookie('userpaths', res.locals.short);
+        res.cookie('userpaths', short);
+        res.locals.paths = short;
         next();
     }else{
         let paths = req.cookies.userpaths.split(',');
         if(paths.length === 5){
             paths.shift();
-            paths.push(res.locals.short);
+            paths.push(short);
+            res.locals.paths = paths;
             res.cookie('userpaths', paths.join(','));
             next();
         }else{
-            paths.push(res.locals.short);
+            paths.push(short);
+            res.locals.paths = paths;
             res.cookie('userpaths', paths.join(','));
             next();
         }

@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const connection = require('../config/db');
 
+
 const Urls = connection.define('Urls', {
     long_uri:{
         type: Sequelize.STRING,
@@ -10,6 +11,10 @@ const Urls = connection.define('Urls', {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
+    },
+    title: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 })
 

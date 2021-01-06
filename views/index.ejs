@@ -4,26 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="../css/main.css" rel="stylesheet">
     <title>yoUrl</title>
 </head>
 <body>
     <div class="container mt-5">
-        <form action="/scripts/shortenUrl" method="POST">
-            <div class="input-group mb-3">
-                <input type="text" name="long" id="long" class="form-control" value="<%= message ? message : 'Type your url here' %>" onclick="this.select()">
-                <button class="input-group-text btn btn-success" >Shorten</button>
-            </div>
-        </form>
-        <% paths.forEach(path =>{%>
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Webscrapping com Node.js – LuizTools </h5><i><a href="">https://youtu.be/xlqwk</a></i>
+        <div class="col-9 mx-auto">
+            <form action="/scripts/shortenUrl" method="POST">
+                <div class="input-group mb-3">
+                    <input type="text" name="long" id="long" class="form-control" value="<%= message ? message : 'Type your url here' %>" onclick="this.select()">
+                    <button class="input-group-text btn btn-success" >Shorten</button>
                 </div>
-                <div class="card-body">
-                    <a href="#">http://35.198.5.233/<%= path %></a>
-                </div>
-                <%})%>
+            </form>
+
         </div>
+        <% if(path_data){%>
+            <div class="col-9 mx-auto">
+            <% path_data.forEach(path =>{%>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title"><%= path.dataValues.title%> </h5>
+                        <i><a href="<%= path.dataValues.long_uri%>" class="card-link"><%= path.dataValues.long_uri%></a></i>
+                    </div>
+                    <div class="card-body">
+                        <a href="http://<%= path.dataValues.short_path%>" class="card-link"><%= path.dataValues.short_path%></a>
+                    </div>
+                </div>
+                    <%})%>
+                <%}%>
+            </div>
+            
     </div>
 
 </body>
