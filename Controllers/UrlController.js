@@ -21,8 +21,8 @@ exports.redirectUrl = async (req, res) =>{
 exports.shortenUrl = async (req, res)=>{
     try{
         const long = req.body.long;
-        const short = res.locals.short;
-        const title = res.locals.title;
+        const short = req.short;
+        const title = req.title;
         await Urls.create({
             long_uri: long,
             short_path: short,

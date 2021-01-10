@@ -6,7 +6,7 @@ exports.getTitle = async (req, res, next)=>{
     axios({method: 'GET', url: long}).then(response =>{
         const html = response.data;
         const $ = cheerio.load(html);
-        res.locals.title = $('title').text();
+        req.title = $('title').text();
         next();
     })
 }
@@ -18,23 +18,20 @@ exports.flashMessage = async (req, res, next)=>{
 }
 
 exports.setCookie = async (req, res, next) => {
-    var short = res.locals.short
+    var short = req.short
 
     if(!req.cookies.userpaths){
         res.cookie('userpaths', short);
-        res.locals.paths = short;
         next();
     }else{
         let paths = req.cookies.userpaths.split(',');
         if(paths.length === 5){
             paths.shift();
             paths.push(short);
-            res.locals.paths = paths;
             res.cookie('userpaths', paths.join(','));
             next();
         }else{
             paths.push(short);
-            res.locals.paths = paths;
             res.cookie('userpaths', paths.join(','));
             next();
         }
@@ -46,7 +43,7 @@ exports.shortenUrl = async (req,res, next) =>{
     const MIN_VALUE = 100000;
     let short = Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE)) + MIN_VALUE;
     short = short.toString(36);
-    res.locals.short = `${req.headers.host}/${short}`;
+    req.short = `${req.headers.host}/${short}`;
     next();
 }
 

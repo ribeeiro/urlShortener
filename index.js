@@ -6,9 +6,6 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
 
-//models
-// const Urls = require('./url/Urls');
-
 //config db
 const connection = require('./database/db');
 
@@ -28,11 +25,10 @@ app.use(session({
     resave: true,
     saveUninitialized: false,
     cookie: {
-        maxAge: 10000
+        maxAge: 60000
     }
 }))
 app.use(cookieParser());
-//routes
 
 app.use('/', require('./routes/urls'));
 
