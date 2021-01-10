@@ -4,17 +4,13 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const {Op} = require('sequelize');
 
 
 //models
-const Urls = require('./url/Urls');
-
-//controllers
-const urlsController = require('./url/urlController');
+// const Urls = require('./url/Urls');
 
 //config db
-const connection = require('./config/db');
+const connection = require('./database/db');
 
 connection.authenticate().then(()=>{
     console.log('connected to database');
@@ -24,9 +20,6 @@ connection.authenticate().then(()=>{
 
 app.set('view engine', 'ejs');
 
-
-const flashMessage = require('./middlewares/flashMessage');
-const setCookies = require('./middlewares/setCookie');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
@@ -40,28 +33,9 @@ app.use(session({
 }))
 app.use(cookieParser());
 //routes
-app.use('/', urlsController);
 
-app.get('/',flashMessage, (req, res)=>{
-    const pathCookie = req.cookies.userpaths
-    if(pathCookie){
-        let paths = pathCookie.split(',');
+app.use('/', require('./routes/urls'));
 
-        Urls.findAll({
-            where: {
-                short_path: {
-                    [Op.or]: paths}
-            },
-        order:[
-            ['createdAt', 'DESC']
-        ]})
-        .then(path_data =>{
-            res.render('index', {path_data});
-        })
-    }else{
-        res.render('index', {path_data: null});
-    }
-})
 
 
 const PORT = process.env.PORT || 3500;

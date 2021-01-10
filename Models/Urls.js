@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const connection = require('../config/db');
+const connection = require('../database/db');
 
 
 const Urls = connection.define('Urls', {

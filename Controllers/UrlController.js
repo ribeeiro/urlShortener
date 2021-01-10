@@ -1,17 +1,8 @@
-const express= require('express');
-const router = express.Router();
-
-
 // models
-const Urls = require('./Urls');
+const Urls = require('../Models/Urls');
+const {Op} = require('sequelize');
 
-//midlewares
-const validateMiddleware = require('../middlewares/validateUrl');
-const shortenMiddleware = require('../middlewares/shortenUrl');
-const setCookieMiddleware = require('../middlewares/setCookie');
-const getTitleMiddleware = require('../middlewares/getTitle');
-
-router.get('/:path', async (req, res)=>{
+exports.redirectUrl = async (req, res) =>{
     const url_path = `${req.headers.host}/${req.params.path}`;
     try{
         const url = await Urls.findOne(
@@ -25,11 +16,9 @@ router.get('/:path', async (req, res)=>{
     catch{
         res.redirect('/');
     }
-})
+}
 
-
-router.post('/scripts/shortenUrl', validateMiddleware, shortenMiddleware, setCookieMiddleware, getTitleMiddleware, 
-async (req, res)=>{
+exports.shortenUrl = async (req, res)=>{
     try{
         const long = req.body.long;
         const short = res.locals.short;
@@ -45,9 +34,26 @@ async (req, res)=>{
     }
     catch(err){
         res.redirect('/');
-    }
-    
-    
-})
+    }   
+}
 
-module.exports = router;
+exports.getUsersPaths = async (req, res) =>{
+    const pathCookie = req.cookies.userpaths
+    if(pathCookie){
+        let paths = pathCookie.split(',');
+
+        Urls.findAll({
+            where: {
+                short_path: {
+                    [Op.or]: paths}
+            },
+        order:[
+            ['createdAt', 'DESC']
+        ]})
+        .then(path_data =>{
+            res.render('index', {path_data});
+        })
+    }else{
+        res.render('index', {path_data: null});
+    }
+}
