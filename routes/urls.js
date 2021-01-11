@@ -5,7 +5,7 @@ const {redirectUrl, shortenUrl, getUsersPaths} = require('../Controllers/UrlCont
 
 const middlewares = require('../middlewares');
 
-router.get('/', middlewares.flashMessage, getUsersPaths)
+router.get('/', getUsersPaths)
 router.get('/:path', redirectUrl);
 router.post('/scripts/shortenUrl', middlewares.validateUrl, middlewares.shortenUrl, middlewares.setCookie, 
 middlewares.getTitle, shortenUrl)

@@ -12,7 +12,7 @@
         <div class="col-9 mx-auto">
             <form action="/scripts/shortenUrl" method="POST">
                 <div class="input-group mb-3">
-                    <input type="text" name="long" id="long" class="form-control" value="<%= message ? message : 'Digite a url aqui' %>" onclick="this.select()">
+                    <input type="text" name="long" id="long" class="form-control" value="<%= message.length > 0 ? message : 'Digite a url aqui' %>" onclick="this.select()">
                     <button class="input-group-text btn btn-success" >Shorten</button>
                 </div>
             </form>

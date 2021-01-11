@@ -4,7 +4,7 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-
+const flash = require('express-flash');
 
 //config db
 const connection = require('./database/db');
@@ -20,6 +20,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
+app.use(cookieParser());
 app.use(session({
     secret: process.env.SECRET,
     resave: true,
@@ -28,7 +29,7 @@ app.use(session({
         maxAge: 60000
     }
 }))
-app.use(cookieParser());
+app.use(flash())
 
 app.use('/', require('./routes/urls'));
 

@@ -13,12 +13,6 @@ exports.getTitle = async (req, res, next)=>{
     })
 }
 
-exports.flashMessage = async (req, res, next)=>{
-    res.locals.message = req.session.message;
-    delete req.session.message;
-    next();
-}
-
 exports.setCookie = async (req, res, next) => {
     var short = req.short
 
@@ -59,7 +53,7 @@ exports.validateUrl = async (req, res, next) => {
             next();
         }
     }else{
-        req.session.message = 'O link é invalido';
+        req.flash('message', 'O link esta incorreto');
         res.redirect('/');
     }
 }

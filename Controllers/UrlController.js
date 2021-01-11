@@ -38,6 +38,7 @@ exports.shortenUrl = async (req, res)=>{
 
 exports.getUsersPaths = async (req, res) =>{
     const pathCookie = req.cookies.userpaths
+    const message = req.flash("message")
     if(pathCookie){
         let paths = pathCookie.split(',');
 
@@ -50,9 +51,9 @@ exports.getUsersPaths = async (req, res) =>{
             ['createdAt', 'DESC']
         ]})
         .then(path_data =>{
-            res.render('index', {path_data});
+            res.render('index', {path_data, message});
         })
     }else{
-        res.render('index', {path_data: null});
+        res.render('index', {path_data: null, message});
     }
 }
