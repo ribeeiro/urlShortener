@@ -28,7 +28,6 @@ exports.shortenUrl = async (req, res)=>{
             short_path: short,
             title
         })
-        // change the value for the url shortened
         req.session.message = `${short}`;
         res.redirect('/');
     }
