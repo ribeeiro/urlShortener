@@ -45,6 +45,7 @@ exports.shortenUrl = async (req,res, next) =>{
 
 exports.validateUrl = async (req, res, next) => {
     const long = req.body.long;
+    
     if(validator.isURL(long)){
         if(validator.isURL(long, {require_protocol: true})){
             next();

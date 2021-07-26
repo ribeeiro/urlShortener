@@ -1,5 +1,5 @@
 // models
-const Urls = require('../Models/Urls');
+const Urls = require('../../database/models/Urls');
 const {Op} = require('sequelize');
 
 exports.redirectUrl = async (req, res) =>{

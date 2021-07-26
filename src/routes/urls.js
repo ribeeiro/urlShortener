@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {redirectUrl, shortenUrl, getUsersPaths} = require('../Controllers/UrlController');
+const {redirectUrl, shortenUrl, getUsersPaths} = require('../controllers/UrlController');
 
 const middlewares = require('../middlewares');
 

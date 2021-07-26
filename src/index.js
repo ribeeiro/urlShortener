@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const bodyParser = require('body-parser');
+const path = require('path');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('express-flash');
 
 //config db
-const connection = require('./database/db');
+const connection = require('../database/db');
 
 connection.authenticate().then(()=>{
     console.log('connected to database');
@@ -16,10 +16,12 @@ connection.authenticate().then(()=>{
 })
 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(session({
     secret: process.env.SECRET,

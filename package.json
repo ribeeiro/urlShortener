@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --delay 1350ms -e ejs,js,json,css index.js"
+    "start": "nodemon --delay 1350ms -e ejs,js,json,css src/index.js"
   },
   "keywords": [],
   "author": "",
